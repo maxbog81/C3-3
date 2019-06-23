@@ -16,15 +16,15 @@
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,5" FontSize="18" FontWeight="Bold">Получатели писем</TextBlock>
         <DockPanel DockPanel.Dock="Top" Margin="5,0,5,3">
-            <TextBlock Margin="0,0,3,0">Фильтр имени:</TextBlock>
-            <TextBox/>
+            <TextBlock Margin="0,0,3,0">Фильтр:</TextBlock>
+            <TextBox Text="{Binding RecipientsFilterText, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
         </DockPanel>
         <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="0,5" Padding="30,5"
                 Command="{Binding UpdateDataCommand}"
                 Content="Обновить"/>
 
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                  ItemsSource="{Binding Recipients}"
+                  ItemsSource="{Binding FiltredRecipients}"
                   SelectedItem="{Binding CurrentRecipient}"
                   HeadersVisibility="Column" 
                   GridLinesVisibility="Vertical"

@@ -40,7 +40,16 @@ namespace MailSender.ViewModel
         public ObservableCollection<Recipient> Recipients
         {
             get => _Recipients;
-            private set => Set(ref _Recipients, value);
+            //private set => Set(ref _Recipients, value);
+            
+            private set
+            {
+                if (!Set(ref _Recipients, value)) return;
+                _RecipientsView.Source = value;
+                RaisePropertyChanged(nameof(FiltredRecipients));
+                //Смысл в следующем: если значение свойства не изменилось(кто - то попытался установить то же значение, что уже было в этом свойстве), то мы просто ничего не делаем. 
+                //    Иначе!!! - мы устанавливаем новый источник данных для _RecipientsView
+            }
         }
 
         private Recipient _CurrentRecipient;
@@ -51,15 +60,31 @@ namespace MailSender.ViewModel
             set => Set(ref _CurrentRecipient, value);
         }
 
-        private ICollectionView _FilterText;
+        #region RecipientsFilterText : string - Текст фильтра получателей
 
-        public ICollectionView FilterText
+        /// <summary>Текст фильтра получателей</summary>
+        private string _RecipientsFilterText;
+
+        /// <summary>Текст фильтра получателей</summary>
+        public string RecipientsFilterText
         {
-            get => _FilterText;
-            //set => CollectionViewSource.View.Update();
+            get => _RecipientsFilterText;
+            //set => Set(ref _RecipientsFilterText, value);
+            set
+            {
+                if (!Set(ref _RecipientsFilterText, value)) return;
+                _RecipientsView.View.Refresh();
+            }
+
         }
 
-    public ICommand UpdateDataCommand { get; }
+        public ICollectionView FiltredRecipients => _RecipientsView.View;
+
+        private readonly CollectionViewSource _RecipientsView;
+
+        #endregion
+
+        public ICommand UpdateDataCommand { get; }
 
         public ICommand CreateRecipientCommand { get; }
 
@@ -77,7 +102,25 @@ namespace MailSender.ViewModel
 
             ApplicationExitCommand = new RelayCommand(OnApplicationExitCommanExecuted, () => true, true);
 
+            _RecipientsView = new CollectionViewSource();
+            _RecipientsView.Filter += OnRecipientsFilter;
+
             //UpdateData();
+        }
+
+        private void OnRecipientsFilter(object Sender, FilterEventArgs E)
+        {
+            //Будем фильтровать фильтровать всех получателей почты, у которых в имени, в адресе, либо в описании будет встречаться текст, который будет указан в _RecipientsFilterText.
+            //Причём, будем делать это без учёта регистра.
+            //При этом, если _RecipientsFilterText хранит пустую ссылку, либо пустую строку, то фильтр должен быть выключен.
+            //Поэтому в методе фильтрации первой строкой будет проверка:
+            var filter = _RecipientsFilterText?.ToUpper();
+            if (string.IsNullOrEmpty(filter)) return;
+            var recipient = (Recipient)E.Item;
+            if (!(recipient.Name?.ToUpper().Contains(filter) ?? false)
+                && !(recipient.Address?.ToUpper().Contains(filter) ?? false)
+                && !(recipient.Description?.ToUpper().Contains(filter) ?? false))
+                E.Accepted = false;
         }
 
         private static void OnApplicationExitCommanExecuted()
