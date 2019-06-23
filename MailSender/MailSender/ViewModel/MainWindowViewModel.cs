@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -49,7 +51,15 @@ namespace MailSender.ViewModel
             set => Set(ref _CurrentRecipient, value);
         }
 
-        public ICommand UpdateDataCommand { get; }
+        private ICollectionView _FilterText;
+
+        public ICollectionView FilterText
+        {
+            get => _FilterText;
+            //set => CollectionViewSource.View.Update();
+        }
+
+    public ICommand UpdateDataCommand { get; }
 
         public ICommand CreateRecipientCommand { get; }
 

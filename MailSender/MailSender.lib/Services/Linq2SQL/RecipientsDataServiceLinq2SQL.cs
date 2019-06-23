@@ -28,6 +28,7 @@ namespace MailSender.lib.Services.Linq2SQL
             return _db.Recipient.ToArray();
         }
 
+
         /// <summary>Создать (зарегистрировать) нового получателя почты в контексте БД</summary>
         /// <param name="item">Создаваемый новый получатель</param>
         public void Create(Recipient item)
