@@ -8,7 +8,8 @@
         xmlns:data="clr-namespace:MailSender.lib.Data;assembly=MailSender.lib"
         xmlns:db="clr-namespace:MailSender.lib.Data.Linq2SQL;assembly=MailSender.lib"
         xmlns:cmp="clr-namespace:MailSender.Components"
-        xmlns:view="clr-namespace:MailSender.View"
+        xmlns:view="clr-namespace:MailSender.View" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="{Binding Title}" 
         Height="500" Width="1024"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}">
@@ -174,7 +175,7 @@
                         <Calendar/>
                         <DockPanel>
                             <TextBlock Margin="0,0,3,0">Время:</TextBlock>
-                            <TextBox Text="00:00:00" TextAlignment="Center"/>
+                            <xctk:TimePicker x:Name="tbTimePicker" />
                         </DockPanel>
                         <StackPanel Margin="0,5">
                             <Button Margin="0,3" Padding="0,5">
