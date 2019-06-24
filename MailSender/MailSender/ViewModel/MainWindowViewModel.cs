@@ -89,6 +89,7 @@ namespace MailSender.ViewModel
         public ICommand CreateRecipientCommand { get; }
 
         public ICommand SaveRecipientCommand { get; }
+        public ICommand DelRecipientCommand { get; }
 
         public ICommand ApplicationExitCommand { get; }
 
@@ -99,6 +100,7 @@ namespace MailSender.ViewModel
             UpdateDataCommand = new RelayCommand(OnUpdateDataCommandExecuted, CanUpdateDataCommandExecute);
             CreateRecipientCommand = new RelayCommand(OnCreateRecipientCommandExecuted, CanCreateRecipientCommandExecute);
             SaveRecipientCommand = new RelayCommand<Recipient>(OnSaveRecipientCommandExecuted, CanSaveRecipientCommandExecuted);
+            DelRecipientCommand = new RelayCommand<Recipient>(OnDelRecipientCommandExecuted, CanDelRecipientCommandExecuted);
 
             ApplicationExitCommand = new RelayCommand(OnApplicationExitCommanExecuted, () => true, true);
 
@@ -133,6 +135,14 @@ namespace MailSender.ViewModel
         private void OnSaveRecipientCommandExecuted(Recipient recipient)
         {
             _RecipientsDataService.Update(recipient);
+        }
+
+        private bool CanDelRecipientCommandExecuted(Recipient recipient) => recipient != null;
+
+        private void OnDelRecipientCommandExecuted(Recipient recipient)
+        {
+            _RecipientsDataService.Delete(recipient);
+            UpdateData();
         }
 
         private bool CanCreateRecipientCommandExecute() => true;

@@ -40,12 +40,16 @@
 
         <UniformGrid Rows="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" 
                      VerticalAlignment="Top"
-                     HorizontalAlignment="Center" Margin="0,5">
-            <Button Margin="3,0" Padding="5,3" Command="{Binding CreateRecipientCommand}">Создать</Button>
-            <Button Margin="3,0" Padding="5,3" 
+                     HorizontalAlignment="Center" Margin="0,10">
+            <Button Margin="2,0" Padding="5,5" Command="{Binding CreateRecipientCommand}">Создать</Button>
+            <Button Margin="0,0" Padding="5,5" 
                     Command="{Binding SaveRecipientCommand}"
                     CommandParameter="{Binding CurrentRecipient}"
                     Content="Сохранить"/>
+            <Button Margin="2,0" Padding="5,5" 
+                    Command="{Binding DelRecipientCommand}"
+                    CommandParameter="{Binding CurrentRecipient}"
+                    Content="Удалить"/>
         </UniformGrid>
     </Grid>
 </UserControl>
